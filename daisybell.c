@@ -7,11 +7,11 @@
 #define RF_MOTOR         1
 #define LR_MOTOR         2
 #define RR_MOTOR         3
-#define SERVO_PORT       0
-
+#define ARM_BASE         0
+#define ELBOW            1
+#define CLAW             2
 // --- Servo Positions ---
-#define RAMP_UP          0
-#define RAMP_DOWN        500
+#define ARM_DOWN         1652
 
 // --- Calibration Constants ---
 #define TICKS_PER_INCH   205.75   // Measured encoder ticks per inch driven
@@ -65,7 +65,7 @@ void drive_inches_gyro(int velocity, float inches, double bias) {
         }
     } else {
         // Reverse Drive: All wheels backward
-        while (abs(gmpc(LF_MOTOR)) < target_ticks) {
+        while (abs(gmpc(LF_MOTOR)) < abs(target_ticks)) {
             dev += (gyro_z() - bias);
             
             int delta = (int)(dev / 10.0);
@@ -139,7 +139,7 @@ void slow_servo(int port, int target_pos, int delay_ms, int step_size) {
         msleep(delay_ms);
     }
 }
-*/
+
 
 void servo_arm() {
 
@@ -150,7 +150,7 @@ void servo_elbow() {
 void servo_claw() {
 
 }
-
+*/
 int main() {
     // 1. Calibrate Gyro while robot is stationary
     double gyro_bias = calibrate_gyro_z();
@@ -158,8 +158,8 @@ int main() {
     // Pivot left 90 degrees
     pivot_right(90.0);
     msleep(150);
-    // Drive 7 inches
-    drive_inches_gyro(DRIVE_VELOCITY, -9, gyro_bias);
+    // Drive ? inches
+    drive_inches_gyro(DRIVE_VELOCITY, -2.0, gyro_bias);
     msleep(150);
     ao();
     return 0;
